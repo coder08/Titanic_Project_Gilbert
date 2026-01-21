@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Prediction System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #444;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .survived {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .not-survived {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .survived h2 {
+            color: #155724;
+        }
+
+        .not-survived h2 {
+            color: #721c24;
+        }
+
+        .details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .probability {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            border: 2px solid #dc3545;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚓ Titanic Survival Prediction</h1>
+        <p class="subtitle">Machine Learning Prediction System</p>
+
+        <div class="info-box">
+            <strong>📊 Model Information:</strong>
+            Algorithm: Random Forest Classifier | Features: Pclass, Sex, Age, Fare, Embarked
+        </div>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="pclass">Passenger Class (1=First, 2=Second, 3=Third)</label>
+                <select id="pclass" name="pclass" required>
+                    <option value="">-- Select Class --</option>
+                    <option value="1">1 - First Class</option>
+                    <option value="2">2 - Second Class</option>
+                    <option value="3">3 - Third Class</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sex">Sex</label>
+                <select id="sex" name="sex" required>
+                    <option value="">-- Select Sex --</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age (years)</label>
+                <input type="number" id="age" name="age" min="0" max="120" step="0.1" required placeholder="Enter age">
+            </div>
+
+            <div class="form-group">
+                <label for="fare">Fare (£)</label>
+                <input type="number" id="fare" name="fare" min="0" step="0.01" required placeholder="Enter fare amount">
+            </div>
+
+            <div class="form-group">
+                <label for="embarked">Port of Embarkation</label>
+                <select id="embarked" name="embarked" required>
+                    <option value="">-- Select Port --</option>
+                    <option value="C">Cherbourg</option>
+                    <option value="Q">Queenstown</option>
+                    <option value="S">Southampton</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict Survival</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <p>🔄 Analyzing passenger data...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <h2 id="predictionText"></h2>
+            <div class="probability">
+                <span><strong>Survival:</strong> <span id="survivalProb"></span></span>
+                <span><strong>Death:</strong> <span id="deathProb"></span></span>
+            </div>
+            <div class="details">
+                <div class="detail-item">
+                    <span class="detail-label">Passenger Class:</span>
+                    <span class="detail-value" id="detailClass"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Sex:</span>
+                    <span class="detail-value" id="detailSex"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Age:</span>
+                    <span class="detail-value" id="detailAge"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Fare:</span>
+                    <span class="detail-value" id="detailFare"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Embarked:</span>
+                    <span class="detail-value" id="detailEmbarked"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+            
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            error.style.display = 'none';
+            
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                
+                if (data.error) {
+                    error.textContent = '❌ ' + data.error;
+                    error.style.display = 'block';
+                } else {
+                    document.getElementById('predictionText').textContent = 
+                        data.prediction === 'Survived' ? '✅ Passenger Survived!' : '❌ Passenger Did Not Survive';
+                    
+                    document.getElementById('survivalProb').textContent = data.survival_probability;
+                    document.getElementById('deathProb').textContent = data.death_probability;
+                    
+                    document.getElementById('detailClass').textContent = data.passenger_details['Passenger Class'];
+                    document.getElementById('detailSex').textContent = data.passenger_details['Sex'];
+                    document.getElementById('detailAge').textContent = data.passenger_details['Age'];
+                    document.getElementById('detailFare').textContent = data.passenger_details['Fare'];
+                    document.getElementById('detailEmbarked').textContent = data.passenger_details['Embarked'];
+                    
+                    result.className = 'result ' + (data.prediction === 'Survived' ? 'survived' : 'not-survived');
+                    result.style.display = 'block';
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                error.textContent = '❌ Error: ' + err.message;
+                error.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Name: [Your Full Name]
+Matric Number: [Your Matric Number]
+Machine Learning Algorithm Used: Random Forest Classifier
+Model Persistence Method Used: Joblib
+Live URL of Hosted Application: [Your deployed URL from Render/PythonAnywhere/etc.]
+GitHub Repository Link: [Your GitHub repository URL]
+
+---
+Project Details:
+- Features Used: Pclass, Sex, Age, Fare, Embarked
+- Target Variable: Survived
+- Accuracy: ~81-83% (on test set)
+- Framework: Flask
+- Deployment Platform: [Render.com/PythonAnywhere/etc.]
