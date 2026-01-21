@@ -1,9 +1,9 @@
-Name: [Your Full Name]
-Matric Number: [Your Matric Number]
+Name: Abiodun Oluwatise
+Matric Number: 22CG031802
 Machine Learning Algorithm Used: Random Forest Classifier
 Model Persistence Method Used: Joblib
 Live URL of Hosted Application: [Your deployed URL from Render/PythonAnywhere/etc.]
-GitHub Repository Link: [Your GitHub repository URL]
+GitHub Repository Link: https://github.com/tiseabiodun/Titanic-Project.git
 
 ---
 Project Details:
@@ -11,4 +11,4 @@ Project Details:
 - Target Variable: Survived
 - Accuracy: ~81-83% (on test set)
 - Framework: Flask
-- Deployment Platform: [Render.com/PythonAnywhere/etc.]
+- Deployment Platform: Render.com
