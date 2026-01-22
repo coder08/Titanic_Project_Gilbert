@@ -1,8 +1,8 @@
-Name: Abiodun Oluwatise
-Matric Number: 22CG031802
+Name: Gilbert Favour
+Matric Number: 22CD032147
 Machine Learning Algorithm Used: Random Forest Classifier
 Model Persistence Method Used: Joblib
-Live URL of Hosted Application: [Your deployed URL from Render/PythonAnywhere/etc.]
+Live URL of Hosted Application: https://titanic-project-fuy2.onrender.com
 GitHub Repository Link: https://github.com/tiseabiodun/Titanic-Project.git
 
 ---
